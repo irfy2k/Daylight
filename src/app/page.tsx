@@ -6,7 +6,7 @@ import { Sun, Grid3X3, SmilePlus, CheckSquare, CreditCard, Activity, Brain, Zap,
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import type { Task, Transaction, Mood, TransactionCategory, TransactionType } from '@/lib/types';
 import { getApiUsage, getRemainingRequests, startGlobalSync, getTotalGlobalRequests } from '@/lib/api-counter';
-import { getProgressMetrics, getAppMetrics, formatSessionTime } from '@/lib/progress-calculator';
+import { getProgressMetrics, getAppMetrics } from '@/lib/progress-calculator';
 import DailySummary from '@/app/components/daily-summary';
 import MoodLogger from '@/app/components/mood-logger';
 import TaskList from '@/app/components/task-list';
@@ -39,14 +39,6 @@ export default function Home() {
   // Progress metrics state
   const [progressMetrics, setProgressMetrics] = useState(() => getProgressMetrics([], null));
   const [appMetrics, setAppMetrics] = useState(() => getAppMetrics());
-
-  // Load user name early
-  useEffect(() => {
-    const storedUserName = localStorage.getItem('daylight_user_name');
-    if (storedUserName) {
-      setUserName(storedUserName);
-    }
-  }, []);
 
   // Update progress metrics when tasks or mood change
   useEffect(() => {
@@ -435,10 +427,6 @@ export default function Home() {
                     
                     <div className="pt-2 mt-3 border-t border-gray-700">
                       <div className="flex justify-between items-center text-xs">
-                        <span className="text-gray-400 font-mono">SESSION TIME</span>
-                        <span className="text-white font-mono">{formatSessionTime(appMetrics.sessionTime)}</span>
-                      </div>
-                      <div className="flex justify-between items-center text-xs mt-1">
                         <span className="text-gray-400 font-mono">DATA POINTS</span>
                         <span className="text-white font-mono">{appMetrics.dataPoints}</span>
                       </div>

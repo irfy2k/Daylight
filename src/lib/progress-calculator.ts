@@ -13,7 +13,6 @@ export interface AppMetrics {
   cpuUsage: number;
   memoryUsage: number;
   networkActivity: number;
-  sessionTime: number;
   dataPoints: number;
 }
 
@@ -112,33 +111,24 @@ export function getProgressMetrics(tasks: Task[], mood: Mood | null): ProgressMe
 }
 
 export function getAppMetrics(): AppMetrics {
-  // Simulate realistic performance metrics with some randomness
   const baseTime = Date.now();
   
-  // CPU usage varies based on activity and time
   const cpuVariation = Math.sin(baseTime / 10000) * 10 + Math.random() * 15;
   const cpuUsage = Math.max(8, Math.min(45, 20 + cpuVariation));
   
-  // Memory usage tends to slowly increase over time
   const sessionMinutes = Math.floor((baseTime % (24 * 60 * 60 * 1000)) / (60 * 1000));
-  const memoryBase = 35 + (sessionMinutes * 0.01); // Slowly increases
+  const memoryBase = 35 + (sessionMinutes * 0.01);
   const memoryUsage = Math.max(30, Math.min(70, memoryBase + Math.random() * 10));
   
-  // Network activity is more sporadic
   const networkBase = Math.sin(baseTime / 5000) * 20 + 25;
   const networkUsage = Math.max(5, Math.min(85, networkBase + Math.random() * 20));
   
-  // Session time in minutes (simulated)
-  const sessionTime = sessionMinutes % 240; // Reset every 4 hours for demo
-  
-  // Data points processed (tasks + mood entries + transactions)
   const dataPoints = getTotalDataPoints();
   
   return {
     cpuUsage: Math.round(cpuUsage),
     memoryUsage: Math.round(memoryUsage),
     networkActivity: Math.round(networkUsage),
-    sessionTime,
     dataPoints
   };
 }
@@ -167,15 +157,4 @@ function getTotalDataPoints(): number {
   } catch {}
   
   return count;
-}
-
-export function formatSessionTime(minutes: number): string {
-  if (minutes < 1) return 'Just started';
-  if (minutes < 60) return `${Math.round(minutes)}m`;
-  
-  const hours = Math.floor(minutes / 60);
-  const remainingMinutes = Math.round(minutes % 60);
-  
-  if (remainingMinutes === 0) return `${hours}h`;
-  return `${hours}h ${remainingMinutes}m`;
 }
