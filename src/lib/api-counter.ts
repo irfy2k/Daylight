@@ -1,6 +1,3 @@
-// Global API Request Counter Utility
-// Tracks API requests with hourly limits across ALL users globally
-
 export interface ApiUsage {
   count: number;
   resetTime: number; // timestamp when counter resets
@@ -135,7 +132,6 @@ export function formatTimeUntilReset(): string {
   return `${hours}h ${remainingMinutes}m`;
 }
 
-// Global synchronization functions
 export function startGlobalSync(): void {
   if (typeof window === 'undefined') return;
   

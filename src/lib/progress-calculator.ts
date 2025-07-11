@@ -1,5 +1,3 @@
-// Progress calculation utilities for dynamic analytics
-
 import type { Task, Transaction, Mood } from './types';
 
 export interface ProgressMetrics {
@@ -19,7 +17,6 @@ export interface AppMetrics {
   dataPoints: number;
 }
 
-// Calculate productivity based on task completion and activity
 export function calculateProductivity(tasks: Task[]): number {
   if (tasks.length === 0) return 0;
   
@@ -36,7 +33,6 @@ export function calculateProductivity(tasks: Task[]): number {
   return Math.min(100, Math.round(completionRate + planningBonus + activityBonus));
 }
 
-// Calculate wellness based on mood patterns and consistency
 export function calculateWellness(mood: Mood | null): number {
   if (!mood) return 0;
   
@@ -69,7 +65,6 @@ export function calculateWellness(mood: Mood | null): number {
   return baseScore;
 }
 
-// Get mood history from localStorage
 function getMoodHistory(): Array<{ date: string; mood: Mood }> {
   if (typeof window === 'undefined') return [];
   
@@ -81,7 +76,6 @@ function getMoodHistory(): Array<{ date: string; mood: Mood }> {
   }
 }
 
-// Calculate comprehensive progress metrics
 export function getProgressMetrics(tasks: Task[], mood: Mood | null): ProgressMetrics {
   const completedTasks = tasks.filter(task => task.completed).length;
   const totalTasks = tasks.length;
@@ -117,7 +111,6 @@ export function getProgressMetrics(tasks: Task[], mood: Mood | null): ProgressMe
   };
 }
 
-// Generate realistic app performance metrics
 export function getAppMetrics(): AppMetrics {
   // Simulate realistic performance metrics with some randomness
   const baseTime = Date.now();
@@ -150,7 +143,6 @@ export function getAppMetrics(): AppMetrics {
   };
 }
 
-// Count total data points in the app
 function getTotalDataPoints(): number {
   if (typeof window === 'undefined') return 0;
   
@@ -177,7 +169,6 @@ function getTotalDataPoints(): number {
   return count;
 }
 
-// Format session time for display
 export function formatSessionTime(minutes: number): string {
   if (minutes < 1) return 'Just started';
   if (minutes < 60) return `${Math.round(minutes)}m`;
