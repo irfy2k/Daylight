@@ -54,32 +54,26 @@ export default function Home() {
     return () => clearInterval(interval);
   }, []);
 
-  // Force loading to complete after 3 seconds maximum
+  // Force loading to complete after 5 seconds maximum (longer than LoadingScreen's 1.5s)
   useEffect(() => {
     const forceComplete = setTimeout(() => {
       if (isLoading) {
-        console.log('Force completing loading screen');
-        setIsLoading(false);
+        handleLoadingComplete();
       }
-    }, 3000);
+    }, 5000);
 
     return () => clearTimeout(forceComplete);
   }, [isLoading]);
 
   // Handle loading completion
   const handleLoadingComplete = () => {
-    console.log('Loading completed, setting isLoading to false');
     setIsLoading(false);
     
     // Check if this is the first time user is visiting
     const storedUserName = localStorage.getItem('daylight_user_name');
     const tutorialCompleted = localStorage.getItem('daylight_tutorial_completed');
     
-    console.log('Stored user name:', storedUserName);
-    console.log('Tutorial completed:', tutorialCompleted);
-    
     if (!storedUserName) {
-      console.log('No stored user name, showing welcome dialog');
       setShowWelcome(true);
     } else {
       setUserName(storedUserName);

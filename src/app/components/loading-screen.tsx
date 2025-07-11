@@ -13,13 +13,9 @@ const LoadingScreen: React.FC<LoadingScreenProps> = ({ onComplete }) => {
   useEffect(() => {
     if (hasCompleted.current) return;
     
-    console.log('Loading screen starting...');
-    
-    // Ensure loading completes after 1.5 seconds
     const timer = setTimeout(() => {
       if (!hasCompleted.current) {
         hasCompleted.current = true;
-        console.log('Loading screen completing...');
         onComplete();
       }
     }, 1500);
