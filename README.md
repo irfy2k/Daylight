@@ -58,7 +58,7 @@ Daylight is a **sleek, minimal, AI-powered daily dashboard** that helps you trac
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/yourusername/daylight.git
+   git clone https://github.com/irfy2k321/daylight.git
    cd daylight
    ```
 
