@@ -1,0 +1,23 @@
+<!-- Simple Daylight App Icon: Sun with rays -->
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <!-- Black background -->
+  <rect width="512" height="512" fill="#000000"/>
+  
+  <!-- White sun icon -->
+  <g fill="#ffffff">
+    <!-- Center circle -->
+    <circle cx="256" cy="256" r="80"/>
+    
+    <!-- Sun rays -->
+    <rect x="248" y="40" width="16" height="60" rx="8"/>
+    <rect x="248" y="412" width="16" height="60" rx="8"/>
+    <rect x="40" y="248" width="60" height="16" ry="8"/>
+    <rect x="412" y="248" width="60" height="16" ry="8"/>
+    
+    <!-- Diagonal rays -->
+    <rect x="120" y="120" width="16" height="42" rx="8" transform="rotate(45 128 141)"/>
+    <rect x="354" y="354" width="16" height="42" rx="8" transform="rotate(45 362 375)"/>
+    <rect x="354" y="120" width="16" height="42" rx="8" transform="rotate(-45 362 141)"/>
+    <rect x="120" y="354" width="16" height="42" rx="8" transform="rotate(-45 128 375)"/>
+  </g>
+</svg>
