@@ -435,8 +435,8 @@ export default function Home() {
           <div className="flex-1 overflow-y-auto p-4 md:p-6 space-y-6">
             <TabsContent value="summary" className="mt-0">
               <div className="space-y-4">
-                {/* Grid layout for Actions and Activity */}
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                {/* Quick Actions and Recent Activity - stacked vertically */}
+                <div className="space-y-4">
                   {/* Quick Actions */}
                   <QuickActions 
                     onAddTask={handleQuickAddTask}

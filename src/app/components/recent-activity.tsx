@@ -25,32 +25,31 @@ export default function RecentActivity({ tasks, transactions }: RecentActivityPr
   const recentActivity = useMemo(() => {
     const activities: ActivityItem[] = [];
     
-    // Add completed tasks - extract timestamp from ID
-    tasks.filter(task => task.completed).forEach(task => {
+    // Add ALL tasks (both completed and incomplete) with their creation time
+    tasks.forEach(task => {
       // Extract timestamp from task ID (format: task_1234567890)
-      const timestamp = parseInt(task.id.split('_')[1]) || Date.now();
-      activities.push({
-        id: `task-completed-${task.id}`,
-        type: 'task_completed',
-        description: `Completed: ${task.text}`,
-        timestamp: new Date(timestamp),
-        icon: <CheckSquare className="size-4" />,
-        color: 'text-green-400'
-      });
-    });
-    
-    // Add recently added tasks (incomplete tasks) - extract timestamp from ID
-    tasks.filter(task => !task.completed).forEach(task => {
-      // Extract timestamp from task ID (format: task_1234567890)
-      const timestamp = parseInt(task.id.split('_')[1]) || Date.now();
-      activities.push({
-        id: `task-added-${task.id}`,
-        type: 'task_added',
-        description: `Added task: ${task.text}`,
-        timestamp: new Date(timestamp),
-        icon: <Plus className="size-4" />,
-        color: 'text-blue-400'
-      });
+      const idParts = task.id.split('_');
+      const timestamp = idParts.length > 1 ? parseInt(idParts[1]) : Date.now();
+      
+      if (task.completed) {
+        activities.push({
+          id: `task-completed-${task.id}`,
+          type: 'task_completed',
+          description: `Completed: ${task.text}`,
+          timestamp: new Date(timestamp),
+          icon: <CheckSquare className="size-4" />,
+          color: 'text-green-400'
+        });
+      } else {
+        activities.push({
+          id: `task-added-${task.id}`,
+          type: 'task_added',
+          description: `Added task: ${task.text}`,
+          timestamp: new Date(timestamp),
+          icon: <Plus className="size-4" />,
+          color: 'text-blue-400'
+        });
+      }
     });
     
     // Add recent transactions - use actual transaction date
@@ -59,7 +58,7 @@ export default function RecentActivity({ tasks, transactions }: RecentActivityPr
         id: `trans-${transaction.id}`,
         type: transaction.type === 'income' ? 'transaction_income' : 'transaction_expense',
         description: transaction.description,
-        timestamp: transaction.date,
+        timestamp: new Date(transaction.date),
         amount: transaction.amount,
         icon: transaction.type === 'income' ? 
           <ArrowUp className="size-4" /> : 
@@ -106,25 +105,27 @@ export default function RecentActivity({ tasks, transactions }: RecentActivityPr
         ) : (
           <div className="space-y-3">
             {recentActivity.map((activity) => (
-              <div key={activity.id} className="flex items-center gap-3 p-2 rounded bg-black border border-gray-700 hover:border-gray-600 transition-colors">
+              <div key={activity.id} className="flex items-center gap-3 p-3 rounded bg-black border border-gray-700 hover:border-gray-600 transition-colors">
                 <div className={`${activity.color} flex-shrink-0`}>
                   {activity.icon}
                 </div>
-                <div className="flex-1 min-w-0">
-                  <p className="text-white text-sm truncate">
+                <div className="flex-1 min-w-0 overflow-hidden">
+                  <p className="text-white text-sm font-medium truncate">
                     {activity.description}
                   </p>
-                  <p className="text-gray-400 text-xs">
+                  <p className="text-gray-400 text-xs font-mono">
                     {getRelativeTime(activity.timestamp)}
                   </p>
                 </div>
                 {activity.amount && (
-                  <Badge 
-                    variant="outline" 
-                    className={`${activity.color} border-current text-xs`}
-                  >
-                    ${activity.amount.toFixed(2)}
-                  </Badge>
+                  <div className="flex-shrink-0">
+                    <Badge 
+                      variant="outline" 
+                      className={`${activity.color} border-current text-xs font-mono`}
+                    >
+                      ${activity.amount.toFixed(2)}
+                    </Badge>
+                  </div>
                 )}
               </div>
             ))}
