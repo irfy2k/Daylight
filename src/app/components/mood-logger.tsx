@@ -182,7 +182,7 @@ const MoodLogger: FC<MoodLoggerProps> = ({ mood, setMood, notes, setNotes, canSe
                   ? "bg-gray-800 border-white text-white shadow-lg" 
                   : (!canSetMood 
                       ? "bg-black border-gray-800 text-gray-600 cursor-not-allowed"
-                      : "bg-black border-gray-600 text-gray-400 hover:border-gray-500 hover:text-gray-300 hover:bg-gray-900")
+                      : "bg-black border-gray-600 text-gray-400 hover:border-gray-500 hover:text-gray-300 hover:bg-black")
               )}
               onClick={() => setMood(option.value, false)} // Mark as user selected
               disabled={!canSetMood && mood !== option.value} // Disable if can't set mood today (except current mood)
@@ -200,7 +200,7 @@ const MoodLogger: FC<MoodLoggerProps> = ({ mood, setMood, notes, setNotes, canSe
         </div>
         
         {mood && (
-          <div className="mt-4 p-3 bg-black border border-gray-600 rounded-lg card-hover transition-all duration-300 hover:bg-gray-900">
+          <div className="mt-4 p-3 bg-black border border-gray-600 rounded-lg card-hover transition-all duration-300 hover:bg-black">
             <div className="flex items-center gap-2 mb-2">
               <div className="w-1.5 h-1.5 bg-white rounded-full animate-pulse" />
               <span className="text-xs text-white font-mono">CURRENT MOOD</span>

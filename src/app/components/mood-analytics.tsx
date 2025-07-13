@@ -229,12 +229,12 @@ const MoodAnalytics: React.FC<MoodAnalyticsProps> = ({ currentMood }) => {
             </h3>
             
             <div className="grid grid-cols-2 gap-4">
-              <div className="bg-black border border-gray-600 rounded p-3 card-hover transition-all duration-300 hover:bg-gray-900">
+              <div className="bg-black border border-gray-600 rounded p-3 card-hover transition-all duration-300 hover:bg-black">
                 <p className="text-xs text-gray-400 font-mono mb-1">DAYS TRACKED</p>
                 <p className="text-xl font-bold text-white">{trends.totalDays}</p>
               </div>
               
-              <div className="bg-black border border-gray-600 rounded p-3 card-hover transition-all duration-300 hover:bg-gray-900">
+              <div className="bg-black border border-gray-600 rounded p-3 card-hover transition-all duration-300 hover:bg-black">
                 <p className="text-xs text-gray-400 font-mono mb-1">MOOD SCORE</p>
                 <p className={`text-xl font-bold ${getScoreColor(trends.averageScore)}`}>
                   {(trends.averageScore * 20).toFixed(0)}%
@@ -246,7 +246,7 @@ const MoodAnalytics: React.FC<MoodAnalyticsProps> = ({ currentMood }) => {
           {/* Most Common Mood & Trend */}
           <div className="bg-gray-900 border border-gray-700 rounded-lg p-4 backdrop-blur-sm card-hover card-black-hover fade-in-up">
             <div className="grid grid-cols-2 gap-4">
-              <div className="bg-black border border-gray-600 rounded p-3 card-hover transition-all duration-300 hover:bg-gray-900">
+              <div className="bg-black border border-gray-600 rounded p-3 card-hover transition-all duration-300 hover:bg-black">
                 <p className="text-xs text-gray-400 font-mono mb-2">MOST COMMON</p>
                 <div className="flex items-center gap-2">
                   <span className="text-2xl">{getMoodEmoji(trends.mostCommon)}</span>
@@ -259,7 +259,7 @@ const MoodAnalytics: React.FC<MoodAnalyticsProps> = ({ currentMood }) => {
                 </div>
               </div>
               
-              <div className="bg-black border border-gray-600 rounded p-3 card-hover transition-all duration-300 hover:bg-gray-900">
+              <div className="bg-black border border-gray-600 rounded p-3 card-hover transition-all duration-300 hover:bg-black">
                 <p className="text-xs text-gray-400 font-mono mb-2">TREND</p>
                 <div className="flex items-center gap-2">
                   {getTrendIcon()}

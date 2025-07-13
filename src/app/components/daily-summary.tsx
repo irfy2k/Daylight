@@ -75,17 +75,17 @@ const DailySummary: FC<DailySummaryProps> = ({ mood, notes, tasks, transactions 
         </div>
         
         <div className="grid grid-cols-3 gap-2 mt-3">
-          <div className="bg-gray-900 border border-gray-600 rounded p-2 text-center card-hover transition-all duration-300 hover:bg-gray-800">
+          <div className="bg-gray-900 border border-gray-600 rounded p-2 text-center card-hover transition-all duration-300 hover:bg-black">
             <Zap className="size-4 text-white mx-auto mb-1" />
             <div className="text-xs text-white font-mono">ENERGY</div>
             <div className="text-sm font-bold text-white">{getEnergyLevel()}</div>
           </div>
-          <div className="bg-gray-900 border border-gray-600 rounded p-2 text-center card-hover transition-all duration-300 hover:bg-gray-800">
+          <div className="bg-gray-900 border border-gray-600 rounded p-2 text-center card-hover transition-all duration-300 hover:bg-black">
             <Target className="size-4 text-white mx-auto mb-1" />
             <div className="text-xs text-white font-mono">FOCUS</div>
             <div className="text-sm font-bold text-white">{getFocusScore()}%</div>
           </div>
-          <div className="bg-gray-900 border border-gray-600 rounded p-2 text-center card-hover transition-all duration-300 hover:bg-gray-800">
+          <div className="bg-gray-900 border border-gray-600 rounded p-2 text-center card-hover transition-all duration-300 hover:bg-black">
             <TrendingUp className="size-4 text-white mx-auto mb-1" />
             <div className="text-xs text-white font-mono">TREND</div>
             <div className="text-sm font-bold text-white">{getTrend()}</div>
@@ -104,7 +104,7 @@ const DailySummary: FC<DailySummaryProps> = ({ mood, notes, tasks, transactions 
             </div>
           </div>
           {notes && (
-            <div className="bg-black border border-gray-600 rounded p-3 mt-3 card-hover transition-all duration-300 hover:bg-gray-900">
+            <div className="bg-black border border-gray-600 rounded p-3 mt-3 card-hover transition-all duration-300 hover:bg-black">
               <div className="text-xs text-gray-400 font-mono mb-1">YOUR THOUGHTS:</div>
               <div className="text-sm text-gray-300 italic">"{notes}"</div>
             </div>
@@ -147,7 +147,7 @@ const DailySummary: FC<DailySummaryProps> = ({ mood, notes, tasks, transactions 
         </div>
         
         <div className="space-y-3">
-          <div className="flex justify-between items-center p-2 bg-black border border-gray-600 rounded card-hover transition-all duration-300 hover:bg-gray-800">
+          <div className="flex justify-between items-center p-2 bg-black border border-gray-600 rounded card-hover transition-all duration-300 hover:bg-black">
             <div className="flex items-center gap-2">
               <ArrowUp className="size-4 text-white" />
               <span className="text-xs font-mono text-white">INCOME</span>
@@ -155,7 +155,7 @@ const DailySummary: FC<DailySummaryProps> = ({ mood, notes, tasks, transactions 
             <span className="font-mono font-bold text-white">+${totalIncome.toFixed(2)}</span>
           </div>
           
-          <div className="flex justify-between items-center p-2 bg-black border border-gray-600 rounded card-hover transition-all duration-300 hover:bg-gray-800">
+          <div className="flex justify-between items-center p-2 bg-black border border-gray-600 rounded card-hover transition-all duration-300 hover:bg-black">
             <div className="flex items-center gap-2">
               <ArrowDown className="size-4 text-gray-400" />
               <span className="text-xs font-mono text-gray-400">EXPENSES</span>
@@ -163,7 +163,7 @@ const DailySummary: FC<DailySummaryProps> = ({ mood, notes, tasks, transactions 
             <span className="font-mono font-bold text-gray-400">-${totalExpenses.toFixed(2)}</span>
           </div>
           
-          <div className="flex justify-between items-center p-2 bg-black border border-gray-600 rounded card-hover transition-all duration-300 hover:bg-gray-800">
+          <div className="flex justify-between items-center p-2 bg-black border border-gray-600 rounded card-hover transition-all duration-300 hover:bg-black">
             <span className="text-xs font-mono text-white">BALANCE</span>
             <span className={`font-mono font-bold ${netBalance >= 0 ? 'text-white' : 'text-gray-400'}`}>
               {netBalance >= 0 ? `+$${netBalance.toFixed(2)}` : `-$${Math.abs(netBalance).toFixed(2)}`}

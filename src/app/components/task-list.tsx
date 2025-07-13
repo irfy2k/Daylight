@@ -194,7 +194,7 @@ const TaskList: FC<TaskListProps> = ({ tasks, addTask, toggleTask, deleteTask, m
                 <Button
                   variant="outline"
                   className={cn(
-                    "flex-1 justify-start text-left font-mono bg-black border-gray-600 text-white hover:bg-gray-800 transition-all duration-300",
+                    "flex-1 justify-start text-left font-mono bg-black border-gray-600 text-white hover:bg-black transition-all duration-300",
                     !dueDate && "text-gray-400"
                   )}
                 >
@@ -253,7 +253,7 @@ const TaskList: FC<TaskListProps> = ({ tasks, addTask, toggleTask, deleteTask, m
         {suggestedTasks.length > 0 ? (
           <div className="space-y-2">
             {suggestedTasks.map((suggestion, index) => (
-              <div key={index} className="flex items-center justify-between p-2 bg-black border border-gray-600 rounded card-hover transition-all duration-300 hover:bg-gray-800">
+              <div key={index} className="flex items-center justify-between p-2 bg-black border border-gray-600 rounded card-hover transition-all duration-300 hover:bg-black">
                 <span className="text-sm text-gray-300 font-mono flex-1">{suggestion}</span>
                 <Button
                   onClick={() => addSuggestedTask(suggestion)}
@@ -287,7 +287,7 @@ const TaskList: FC<TaskListProps> = ({ tasks, addTask, toggleTask, deleteTask, m
               "group flex items-center gap-3 p-3 rounded-lg border transition-all duration-300 card-hover",
               task.completed 
                 ? "bg-gray-800 border-gray-600" 
-                : "bg-black border-gray-600 hover:border-gray-500 hover:bg-gray-900"
+                : "bg-black border-gray-600 hover:border-gray-500 hover:bg-black"
             )}>
               <div className="relative">
                 <Checkbox

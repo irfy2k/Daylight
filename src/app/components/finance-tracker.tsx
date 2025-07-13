@@ -12,7 +12,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import type { Transaction, TransactionCategory, TransactionType } from '@/lib/types';
-import { ArrowUpCircle, ArrowDownCircle, PlusCircle, DollarSign, TrendingUp, Database, Cpu } from 'lucide-react';
+import { ArrowUpCircle, ArrowDownCircle, PlusCircle, DollarSign, TrendingUp, TrendingDown, Database, Cpu } from 'lucide-react';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 
 interface FinanceTrackerProps {
@@ -49,6 +49,28 @@ const FinanceTracker: FC<FinanceTrackerProps> = ({ transactions, addTransaction 
     addTransaction(values);
     form.reset();
   }
+
+  // Calculate growth based on income vs expenses
+  const totalIncome = transactions
+    .filter(t => t.type === 'income')
+    .reduce((sum, t) => sum + t.amount, 0);
+  
+  const totalExpenses = transactions
+    .filter(t => t.type === 'expense')
+    .reduce((sum, t) => sum + t.amount, 0);
+
+  const netBalance = totalIncome - totalExpenses;
+  
+  // Calculate growth percentage based on income vs expenses ratio
+  let growthPercentage = 0;
+  if (totalExpenses > 0) {
+    growthPercentage = ((totalIncome - totalExpenses) / totalExpenses) * 100;
+  } else if (totalIncome > 0) {
+    growthPercentage = 100; // 100% growth if only income, no expenses
+  }
+  
+  const growthColor = growthPercentage >= 0 ? 'text-green-400' : 'text-red-400';
+  const growthIcon = growthPercentage >= 0 ? 'TrendingUp' : 'TrendingDown';
   
   return (
     <div className="space-y-4">
@@ -63,17 +85,23 @@ const FinanceTracker: FC<FinanceTrackerProps> = ({ transactions, addTransaction 
         </div>
         
         <div className="grid grid-cols-3 gap-2 mt-3">
-          <div className="bg-gray-900 border border-gray-600 rounded p-2 text-center card-hover transition-all duration-300 hover:bg-gray-800">
-            <TrendingUp className="size-4 text-white mx-auto mb-1" />
+          <div className="bg-gray-900 border border-gray-600 rounded p-2 text-center card-hover transition-all duration-300 hover:bg-black">
+            {growthPercentage >= 0 ? (
+              <TrendingUp className="size-4 text-green-400 mx-auto mb-1" />
+            ) : (
+              <TrendingDown className="size-4 text-red-400 mx-auto mb-1" />
+            )}
             <p className="text-xs text-white font-mono">GROWTH</p>
-            <p className="text-sm font-bold text-white">+12%</p>
+            <p className={`text-sm font-bold ${growthColor}`}>
+              {growthPercentage >= 0 ? '+' : ''}{growthPercentage.toFixed(1)}%
+            </p>
           </div>
-          <div className="bg-gray-900 border border-gray-600 rounded p-2 text-center card-hover transition-all duration-300 hover:bg-gray-800">
+          <div className="bg-gray-900 border border-gray-600 rounded p-2 text-center card-hover transition-all duration-300 hover:bg-black">
             <Database className="size-4 text-white mx-auto mb-1" />
             <p className="text-xs text-white font-mono">ENTRIES</p>
             <p className="text-sm font-bold text-white">{transactions.length}</p>
           </div>
-          <div className="bg-gray-900 border border-gray-600 rounded p-2 text-center card-hover transition-all duration-300 hover:bg-gray-800">
+          <div className="bg-gray-900 border border-gray-600 rounded p-2 text-center card-hover transition-all duration-300 hover:bg-black">
             <Cpu className="size-4 text-white mx-auto mb-1" />
             <p className="text-xs text-white font-mono">STATUS</p>
             <p className="text-sm font-bold text-white">ACTIVE</p>
@@ -203,8 +231,8 @@ const FinanceTracker: FC<FinanceTrackerProps> = ({ transactions, addTransaction 
             <div key={t.id} className={`
               flex items-center justify-between p-3 rounded-lg border transition-all duration-300 card-hover
               ${t.type === 'income' 
-                ? 'bg-gray-800 border-gray-600 hover:bg-gray-700' 
-                : 'bg-black border-gray-600 hover:bg-gray-900'
+                ? 'bg-gray-800 border-gray-600 hover:bg-black' 
+                : 'bg-black border-gray-600 hover:bg-black'
               }
             `}>
               <div className="flex items-center gap-3">

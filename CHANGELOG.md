@@ -1,5 +1,30 @@
 # Changelog
 
+## [1.1.0] - 2025-07-13
+
+### Added
+- **Quality of Life Dashboard Improvements**
+  - QuickStats component with productivity scoring and progress visualization
+  - QuickActions component with fast task/transaction entry and data export/import
+  - RecentActivity component showing chronological activity timeline
+  - Enhanced summary tab with comprehensive dashboard view
+- **Mobile-Optimized Experience**
+  - Removed keyboard shortcuts for pure mobile focus
+  - Touch-friendly interface optimizations
+  - Responsive dashboard layout improvements
+
+### Fixed
+- Resolved favicon conflicts causing 500 errors
+- Fixed tab switching state mismatch (overview → summary)
+- Eliminated runtime errors causing empty dashboard display
+- Improved loading performance and stability
+
+### Technical
+- Comprehensive localStorage persistence for all user data
+- Enhanced state management for tab navigation
+- Proper TypeScript interfaces for all new components
+- Mobile-first responsive design improvements
+
 ## [1.0.0] - 2025-07-11
 
 ### Added

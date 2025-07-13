@@ -7,6 +7,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import type { Task, Transaction, Mood, TransactionCategory, TransactionType } from '@/lib/types';
 import { getApiUsage, getRemainingRequests, startGlobalSync, getTotalGlobalRequests } from '@/lib/api-counter';
 import { getProgressMetrics, getAppMetrics } from '@/lib/progress-calculator';
+import { useToast } from "@/hooks/use-toast";
 import DailySummary from '@/app/components/daily-summary';
 import MoodLogger from '@/app/components/mood-logger';
 import TaskList from '@/app/components/task-list';
@@ -16,6 +17,8 @@ import WelcomeDialog from '@/app/components/welcome-dialog';
 import MoodConfirmationDialog from '@/app/components/mood-confirmation-dialog';
 import AppTutorial from '@/app/components/app-tutorial';
 import MoodAnalytics from '@/app/components/mood-analytics';
+import QuickActions from '@/app/components/quick-actions';
+import RecentActivity from '@/app/components/recent-activity';
 
 export default function Home() {
   // ALL hooks must be declared first, before any conditional returns
@@ -31,14 +34,102 @@ export default function Home() {
   const [currentTime, setCurrentTime] = useState(new Date());
   
   const [tasks, setTasks] = useState<Task[]>([]);
-
   const [transactions, setTransactions] = useState<Transaction[]>([]);
 
   const [globalApiUsage, setGlobalApiUsage] = useState(() => getApiUsage());
   
+  // Tab switching state
+  const [activeTab, setActiveTab] = useState('summary');
+  
   // Progress metrics state
   const [progressMetrics, setProgressMetrics] = useState(() => getProgressMetrics([], null));
   const [appMetrics, setAppMetrics] = useState(() => getAppMetrics());
+
+  // Hooks
+  const { toast } = useToast();
+
+  // Load data from localStorage on mount
+  useEffect(() => {
+    // Load tasks
+    const storedTasks = localStorage.getItem('daylight_tasks');
+    if (storedTasks) {
+      try {
+        const parsedTasks = JSON.parse(storedTasks);
+        // Convert date strings back to Date objects for dueDate
+        const tasksWithDates = parsedTasks.map((task: any) => ({
+          ...task,
+          dueDate: task.dueDate ? new Date(task.dueDate) : undefined
+        }));
+        setTasks(tasksWithDates);
+      } catch (error) {
+        console.error('Error parsing stored tasks:', error);
+      }
+    }
+
+    // Load transactions
+    const storedTransactions = localStorage.getItem('daylight_transactions');
+    if (storedTransactions) {
+      try {
+        const parsedTransactions = JSON.parse(storedTransactions);
+        // Convert date strings back to Date objects
+        const transactionsWithDates = parsedTransactions.map((t: any) => ({
+          ...t,
+          date: new Date(t.date)
+        }));
+        setTransactions(transactionsWithDates);
+      } catch (error) {
+        console.error('Error parsing stored transactions:', error);
+      }
+    }
+
+    // Load notes
+    const storedNotes = localStorage.getItem('daylight_notes');
+    if (storedNotes) {
+      setNotes(storedNotes);
+    }
+
+    // Load mood
+    const storedMood = localStorage.getItem('daylight_mood');
+    if (storedMood && storedMood !== '') {
+      setMood(storedMood as Mood);
+    }
+  }, []);
+
+  // Save tasks to localStorage whenever tasks change
+  useEffect(() => {
+    // Only save if we have tasks or if there was previously saved data
+    const hasExistingData = localStorage.getItem('daylight_tasks') !== null;
+    if (tasks.length > 0 || hasExistingData) {
+      localStorage.setItem('daylight_tasks', JSON.stringify(tasks));
+    }
+  }, [tasks]);
+
+  // Save transactions to localStorage whenever transactions change
+  useEffect(() => {
+    // Only save if we have transactions or if there was previously saved data
+    const hasExistingData = localStorage.getItem('daylight_transactions') !== null;
+    if (transactions.length > 0 || hasExistingData) {
+      localStorage.setItem('daylight_transactions', JSON.stringify(transactions));
+    }
+  }, [transactions]);
+
+  // Save notes to localStorage whenever notes change
+  useEffect(() => {
+    // Only save if we have notes or if there was previously saved data
+    const hasExistingData = localStorage.getItem('daylight_notes') !== null;
+    if (notes.trim() || hasExistingData) {
+      localStorage.setItem('daylight_notes', notes);
+    }
+  }, [notes]);
+
+  // Save mood to localStorage whenever mood changes
+  useEffect(() => {
+    // Only save if we have a mood or if there was previously saved data
+    const hasExistingData = localStorage.getItem('daylight_mood') !== null;
+    if (mood || hasExistingData) {
+      localStorage.setItem('daylight_mood', mood || '');
+    }
+  }, [mood]);
 
   // Update progress metrics when tasks or mood change
   useEffect(() => {
@@ -220,6 +311,32 @@ export default function Home() {
     setTransactions(prev => [newTransaction, ...prev]);
   };
 
+  // Quick action handlers
+  const handleQuickAddTask = (text: string) => {
+    addTask(text);
+    toast({
+      title: "Task added",
+      description: `"${text}" added to your task list`,
+    });
+  };
+
+  const handleQuickAddTransaction = (data: {
+    type: TransactionType;
+    amount: number;
+    description: string;
+    category: TransactionCategory;
+  }) => {
+    addTransaction(data);
+    toast({
+      title: `${data.type === 'expense' ? 'Expense' : 'Income'} added`,
+      description: `$${data.amount} - ${data.description}`,
+    });
+  };
+
+  const handleTabSwitch = (tab: string) => {
+    setActiveTab(tab);
+  };
+
   return (
     <>
       <WelcomeDialog 
@@ -314,10 +431,32 @@ export default function Home() {
           </div>
         </header>
 
-        <Tabs defaultValue="summary" className="w-full flex-1 flex flex-col">
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full flex-1 flex flex-col">
           <div className="flex-1 overflow-y-auto p-4 md:p-6 space-y-6">
             <TabsContent value="summary" className="mt-0">
-              <DailySummary mood={mood} notes={notes} tasks={tasks} transactions={transactions} />
+              <div className="space-y-4">
+                {/* Grid layout for Actions and Activity */}
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                  {/* Quick Actions */}
+                  <QuickActions 
+                    onAddTask={handleQuickAddTask}
+                    onAddTransaction={handleQuickAddTransaction}
+                    tasks={tasks}
+                    transactions={transactions}
+                    notes={notes}
+                    mood={mood}
+                  />
+                  
+                  {/* Recent Activity */}
+                  <RecentActivity 
+                    tasks={tasks} 
+                    transactions={transactions} 
+                  />
+                </div>
+                
+                {/* Original Daily Summary */}
+                <DailySummary mood={mood} notes={notes} tasks={tasks} transactions={transactions} />
+              </div>
             </TabsContent>
             <TabsContent value="mood" className="mt-0">
               <MoodLogger 
