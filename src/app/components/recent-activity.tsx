@@ -25,32 +25,36 @@ export default function RecentActivity({ tasks, transactions }: RecentActivityPr
   const recentActivity = useMemo(() => {
     const activities: ActivityItem[] = [];
     
-    // Add completed tasks (simulate recent completion by checking if they're completed)
-    tasks.filter(task => task.completed).slice(0, 3).forEach(task => {
+    // Add completed tasks - extract timestamp from ID
+    tasks.filter(task => task.completed).forEach(task => {
+      // Extract timestamp from task ID (format: task_1234567890)
+      const timestamp = parseInt(task.id.split('_')[1]) || Date.now();
       activities.push({
         id: `task-completed-${task.id}`,
         type: 'task_completed',
         description: `Completed: ${task.text}`,
-        timestamp: new Date(Date.now() - Math.random() * 3600000), // Random time within last hour
+        timestamp: new Date(timestamp),
         icon: <CheckSquare className="size-4" />,
         color: 'text-green-400'
       });
     });
     
-    // Add recently added tasks (incomplete tasks)
-    tasks.filter(task => !task.completed).slice(0, 2).forEach(task => {
+    // Add recently added tasks (incomplete tasks) - extract timestamp from ID
+    tasks.filter(task => !task.completed).forEach(task => {
+      // Extract timestamp from task ID (format: task_1234567890)
+      const timestamp = parseInt(task.id.split('_')[1]) || Date.now();
       activities.push({
         id: `task-added-${task.id}`,
         type: 'task_added',
         description: `Added task: ${task.text}`,
-        timestamp: new Date(Date.now() - Math.random() * 7200000), // Random time within last 2 hours
+        timestamp: new Date(timestamp),
         icon: <Plus className="size-4" />,
         color: 'text-blue-400'
       });
     });
     
-    // Add recent transactions (last 4)
-    transactions.slice(0, 4).forEach(transaction => {
+    // Add recent transactions - use actual transaction date
+    transactions.forEach(transaction => {
       activities.push({
         id: `trans-${transaction.id}`,
         type: transaction.type === 'income' ? 'transaction_income' : 'transaction_expense',
@@ -73,11 +77,13 @@ export default function RecentActivity({ tasks, transactions }: RecentActivityPr
   const getRelativeTime = (date: Date) => {
     const now = new Date();
     const diffMs = now.getTime() - date.getTime();
+    const diffSeconds = Math.floor(diffMs / 1000);
     const diffMins = Math.floor(diffMs / (1000 * 60));
     const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
     const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
     
-    if (diffMins < 1) return 'Just now';
+    if (diffSeconds < 5) return 'Just now';
+    if (diffSeconds < 60) return `${diffSeconds}s ago`;
     if (diffMins < 60) return `${diffMins}m ago`;
     if (diffHours < 24) return `${diffHours}h ago`;
     if (diffDays < 7) return `${diffDays}d ago`;

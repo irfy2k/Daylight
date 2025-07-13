@@ -12,12 +12,20 @@
   - Removed keyboard shortcuts for pure mobile focus
   - Touch-friendly interface optimizations
   - Responsive dashboard layout improvements
+- **Consistent Dark Hover Animations**
+  - Standardized all card hover effects to use deep black (`hover:bg-black`)
+  - Updated 20+ hover effects across daily-summary, task-list, finance-tracker, mood-analytics, mood-logger, and quick-actions components
+  - Improved visual consistency and user experience across all dashboard sections
 
 ### Fixed
 - Resolved favicon conflicts causing 500 errors
 - Fixed tab switching state mismatch (overview → summary)
 - Eliminated runtime errors causing empty dashboard display
 - Improved loading performance and stability
+- **Fixed Recent Activity timestamps** - Now shows accurate creation times instead of random fake timestamps
+  - Extract real timestamps from task IDs for accurate "Just now" and "Xs ago" display
+  - Added seconds precision for very recent actions (under 1 minute)
+  - Use actual transaction dates for proper chronological ordering
 
 ### Technical
 - Comprehensive localStorage persistence for all user data
